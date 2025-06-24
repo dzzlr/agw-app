@@ -1,3 +1,0 @@
-{"event":"LOGIN","data":{"username":"ITDP2F","ip":"::1","status":"SUCCESS"},"timestamp":"2025-06-06T10:06:54.067Z"}
-{"event":"LOGIN","data":{"username":"ITDP2F","ip":"::1","status":"SUCCESS"},"timestamp":"2025-06-06T15:29:02.362Z"}
-{"event":"GET_ALL_FINDING","data":{"username":"","ip":"::1","status":"SUCCESS"},"timestamp":"2025-06-07T10:19:42.032Z"}
