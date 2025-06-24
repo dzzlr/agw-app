@@ -38,6 +38,11 @@ npm install
 npm run migrate up
 ```
 
+### Run App
+```
+npm run start-dev
+```
+
 migrate create ‘<migration name>’: Digunakan untuk membuat berkas migration baru.
 migrate up:  Digunakan untuk menjalankan seluruh up migration yang belum dijalankan.
 migrate down: Digunakan untuk menjalankan satu down migration dari keadaan saat ini.
