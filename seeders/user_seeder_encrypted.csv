@@ -1,0 +1,8 @@
+name,username,password,role,division,email
+Fadhil Umar,ITDP2F,$2b$10$QZuGBEtxJCOaRqp46nG8i.AlrXFNyUd9eWRU8ibCLE.mkBTSXkm6G,master,Information Technology,ffarouq@bankbjb.co.id
+Craig Koljaan,ITDP2C,$2b$10$2jjSBLcIKRwdnF4.1jcKM.bBTeAeU3C0dan9.JRtCu1obrx2SAbVO,maker,Information Technology,ckoljaan@bankbjb.co.id
+Elan Ayu,ITDP2E,$2b$10$ETEVXUgdF0biFm7Rbk/VUu2CXWaT/gQiLCh1ZFt8om/Rqs9a7XA42,maker,Information Technology,enorsyarif@bankbjb.co.id
+Elvetta Barnitan,IAGVT,$2b$10$wXSJpoA9aJMtymjJ7vPQ0.BXr1E6YO9R8faLPkmeQ8Euty6m9A122,approver,Information Technology,ebarnitan@bankbjb.co.id
+Roni Welem Akyuwen,IAGRN,$2b$10$rK7aUz..tH3JmlI1Ngqjx.mry78ZehzyIKOStL9UewHbFW1Mp7Moq,approver,Information Technology,rakyuwen@bankbjb.co.id
+Suryadi Sapari,VDHSS,$2b$10$gVM2AxEr7tDeaLvo3QCzQeaRrkUGP/HJz0OVoGgahA3W5NSMkcSjK,ops_vdh,Information Technology,example1@mail.com
+Graha Noviana,VDHGN,$2b$10$W/Vgw/xoLMDpOFQmlurmleUn0OgNQDEu5hjEgThRSpuu66jnoOrfa,dev_vdh,Information Technology,example2@mail.com
