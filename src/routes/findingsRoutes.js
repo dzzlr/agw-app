@@ -4,11 +4,15 @@ const {
   createFinding,
   getFindingById,
   updateFinding,
-  deleteFinding
+  deleteFinding,
+  getAvailableCategories
 } = require('../controllers/findingsController');
 const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
+
+// GET /api/findings/categories - Get available categories for findings
+router.get('/categories', authMiddleware(["it_governance"]), getAvailableCategories);
 
 // GET /api/findings - Get all audit findings
 router.get('/', authMiddleware(["it_governance"]), getAllFindings);

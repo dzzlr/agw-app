@@ -18,6 +18,14 @@ const getAuditById = async (id) => {
 };
 
 /**
+ * Get all audit names
+ * @returns {Promise<Array>} Array of audit names
+ */
+const getAllAuditNames = async () => {
+  return await auditRepository.getAllAuditNames();
+};
+
+/**
  * Create a new audit
  * @param {Object} audit - Audit object
  * @returns {Promise<Object>} Created audit object
@@ -48,6 +56,7 @@ const deleteAudit = async (id) => {
 module.exports = {
   getAllAudits,
   getAuditById,
+  getAllAuditNames,
   createAudit,
   updateAudit,
   deleteAudit

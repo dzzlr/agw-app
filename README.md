@@ -9,10 +9,13 @@ A comprehensive backend service for managing audit findings, reports, and relate
 - [API Endpoints](#api-endpoints)
 - [Authentication & Authorization](#authentication--authorization)
 - [Database Schema](#database-schema)
+- [Data Relationships](#data-relationships)
 - [Setup & Installation](#setup--installation)
 - [Development](#development)
 - [Production](#production)
+- [Environment Variables](#environment-variables)
 - [Database Migration](#database-migration)
+- [API Request Examples](#api-request-examples)
 
 ## Features
 
@@ -21,6 +24,7 @@ A comprehensive backend service for managing audit findings, reports, and relate
   - Manage different audit types (internal, external, regulatory)
   - Document root causes and recommendations
   - Monitor commitment dates and responsible persons
+  - Findings are linked to existing audits for data integrity
 
 - **Security & Access Control**
   - JWT-based authentication
@@ -90,6 +94,7 @@ audit-service/
 |--------|----------|-------------|--------------|
 | GET | `/api/findings` | Get all audit findings | it_governance |
 | POST | `/api/findings` | Create a new audit finding | it_governance |
+| GET | `/api/findings/categories` | Get available categories for findings | it_governance |
 | GET | `/api/findings/:id` | Get an audit finding by ID | it_governance |
 | PUT | `/api/findings/:id` | Update an audit finding by ID | it_governance |
 | DELETE | `/api/findings/:id` | Delete an audit finding by ID | it_governance |
@@ -127,7 +132,7 @@ The API uses JWT (JSON Web Token) for authentication. All endpoints are protecte
 |--------|------|-------------|
 | id | SERIAL | Primary key |
 | name | VARCHAR(255) | Finding name |
-| category | VARCHAR(255) | Audit category |
+| category | VARCHAR(255) | Audit category (must match an existing audit name) |
 | root_cause | TEXT | Root cause description |
 | recommendation | TEXT | Recommendation text |
 | commitment | TEXT | Commitment for follow-up |
@@ -148,6 +153,12 @@ The API uses JWT (JSON Web Token) for authentication. All endpoints are protecte
 | date | TEXT | Audit date |
 | created_at | TEXT | Creation timestamp |
 | updated_at | TEXT | Last update timestamp |
+
+## Data Relationships
+
+- The `category` field in the Findings table must match an existing audit `name` from the Audits table
+- This ensures that all findings are associated with valid audits
+- The `/api/findings/categories` endpoint provides a list of valid categories (audit names)
 
 ## Setup & Installation
 
@@ -230,6 +241,24 @@ To start the production server:
 npm run start-prod
 ```
 
+## Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+# PostgreSQL Configuration
+PGHOST=localhost
+PGPORT=5432
+PGUSER=developer
+PGPASSWORD=supersecretpassword
+PGDATABASE=agw_db
+DATABASE_URL=postgresql://developer:supersecretpassword@localhost:5432/agw_db
+
+# Application Configuration
+APP_SECRET_KEY=your_secret_key_here
+BACKEND_PORT=5002
+```
+
 ## Database Migration
 
 The application uses `node-pg-migrate` for database migrations.
@@ -273,9 +302,26 @@ curl -X POST http://localhost:5002/api/audits \
   }'
 ```
 
-### Get all findings
+### Get available categories for findings
 
 ```bash
-curl -X GET http://localhost:5002/api/findings \
+curl -X GET http://localhost:5002/api/findings/categories \
   -H "Authorization: Bearer <your-token>"
+```
+
+### Create a new finding
+
+```bash
+curl -X POST http://localhost:5002/api/findings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "name": "Missing Access Controls",
+    "category": "Annual Security Audit 2025",
+    "root_cause": "Insufficient security policy implementation",
+    "recommendation": "Implement role-based access control",
+    "commitment": "Will implement RBAC system",
+    "commitment_date": "2025-09-01",
+    "person_in_charge": "Security Team Lead"
+  }'
 ```
