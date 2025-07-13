@@ -1,55 +1,56 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-// Authentication Middleware with Role-Based Access Control
-const authMiddleware = (allowedRoles = []) => (req, res, next) => {
-  try {
-    // Check for Authorization header
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        success: false,
-        error: "Unauthorized",
-        message: "Access denied. No token provided.",
-      });
-    }
-
-    // Extract token from header
-    const token = authHeader.split(" ")[1];
-
-    // Verify JWT token
-    const secretKey = process.env.APP_SECRET_KEY;
-    jwt.verify(token, secretKey, (err, decoded) => {
-      if (err) {
+/**
+ * Authentication middleware to verify JWT token and check user role
+ * @param {Array} allowedRoles - Array of roles allowed to access the route
+ * @returns {Function} Express middleware function
+ */
+const authMiddleware = (allowedRoles = []) => {
+  return (req, res, next) => {
+    try {
+      // Get token from Authorization header
+      const authHeader = req.headers.authorization;
+      
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
           success: false,
-          error: "Invalid Token",
-          message: "Token is invalid or has expired.",
+          error: 'Access denied. No token provided.'
         });
       }
 
-      // Check if user's role is allowed
-      if (allowedRoles.length && !allowedRoles.includes(decoded.role)) {
-        return res.status(403).json({
+      // Extract the token
+      const token = authHeader.split(' ')[1];
+
+      try {
+        // Verify token using the secret key from .env
+        const decoded = jwt.verify(token, process.env.APP_SECRET_KEY);
+        
+        // Check if user has required role (it_governance)
+        if (allowedRoles.length > 0 && !allowedRoles.includes(decoded.role)) {
+          return res.status(403).json({
+            success: false,
+            error: 'Access denied. Insufficient permissions.'
+          });
+        }
+
+        // Add user info to request object
+        req.user = decoded;
+        next();
+      } catch (error) {
+        return res.status(401).json({
           success: false,
-          error: "Forbidden",
-          message: "You do not have permission to access this resource.",
+          error: 'Invalid token.'
         });
       }
-
-      // Attach user info to request
-      req.user = decoded;
-      req.headers['x-user-id'] = req.user.id; // Save current user id
-      req.headers['x-user-role'] = req.user.role; // Save current user role
-      next();
-    });
-  } catch (error) {
-    console.error("Auth Middleware Error:", error.message);
-    return res.status(500).json({
-      success: false,
-      error: "Internal Server Error",
-      message: "An unexpected error occurred.",
-    });
-  }
+    } catch (error) {
+      console.error('Authentication error:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Server error during authentication.'
+      });
+    }
+  };
 };
 
 module.exports = authMiddleware;
